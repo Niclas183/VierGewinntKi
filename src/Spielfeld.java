@@ -23,6 +23,16 @@ public class Spielfeld {
         }
     }
 
+    public void setzeStein(int zug, int nummer){
+        for(int i = field.length-1; i>=0; i--)
+        {
+            if(field[i][zug]==0) {
+                field[i][zug] = nummer;
+                break;
+            }
+
+        }
+    }
     public void druckeSpielfeld()
     {
         for(int i = 0; i<field.length; i++)
@@ -77,7 +87,7 @@ public class Spielfeld {
         //Zeile
         for(int i = 0; i<field.length; i++)
         {
-            for(int j = 0; j<field[i].length-4; j++)
+            for(int j = 0; j<field[i].length-3; j++)
             {
                 won = true;
                 for(int k = j; k<j+4; k++) {
