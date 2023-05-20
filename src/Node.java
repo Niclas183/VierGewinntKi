@@ -10,7 +10,7 @@ public class Node {
     public int numberCoins;
     public int depth;
     public boolean draw = false;
-    private static final int WEIGHT1 = 7;
+    private static final int WEIGHT1 = 10;
     private static final int WEIGHT2 = 2;
     private static final int WEIGHT3 = 1;
     private static final int WEIGHT4 = 5;
@@ -187,7 +187,7 @@ public class Node {
                 }
             }
 
-            //Diagonale 3er
+            //Diagonale 3er links-rechts
             for (int i = 3; i < field.length; i++) {
                 for (int j = 0; j < field[0].length - 3; j++) {
                     if (field[i][j] == maximizer.getNummer() && field[i - 1][j + 1] == maximizer.getNummer() && field[i - 2][j + 2] == 0 && field[i - 3][j + 3] == maximizer.getNummer())
@@ -201,10 +201,24 @@ public class Node {
                 }
             }
 
+            //Diagonale 3er rechts-links
+            for (int i = 3; i < field.length; i++) {
+                for (int j = 3; j < field[0].length; j++) {
+                    if (field[i][j] == maximizer.getNummer() && field[i - 1][j - 1] == maximizer.getNummer() && field[i - 2][j - 2] == 0 && field[i - 3][j - 3] == maximizer.getNummer())
+                        erg += WEIGHT4;
+                    else if (field[i][j] == maximizer.getNummer() && field[i - 1][j - 1] == maximizer.getNummer() && field[i - 2][j - 2] == maximizer.getNummer() && field[i - 3][j - 3] == 0)
+                        erg += WEIGHT4;
+                    else if (field[i][j] == maximizer.getNummer() && field[i - 1][j - 1] == 0 && field[i - 2][j - 2] == maximizer.getNummer() && field[i - 3][j - 3] == maximizer.getNummer())
+                        erg += WEIGHT4;
+                    else if (field[i][j] == 0 && field[i - 1][j - 1] == maximizer.getNummer() && field[i - 2][j - 2] == maximizer.getNummer() && field[i - 3][j - 3] == maximizer.getNummer())
+                        erg += WEIGHT4;
+                }
+            }
+
             //2er und 3er spalte
             for (int i = 0; i < field[0].length; i++) {
                 count = 0;
-                for (int j = field.length - 1; j >= 2; j--) {
+                for (int j = field.length - 1; j >= 1; j--) {
                     if (field[j][i] == maximizer.getNummer()) {
                         count++;
                         if (count == 2 && field[j - 1][i] == 0)
@@ -300,7 +314,7 @@ public class Node {
                 }
             }
 
-            //Diagonale 3er
+            //Diagonale 3er links-rechts
             for (int i = 3; i < field.length; i++) {
                 for (int j = 0; j < field[0].length - 3; j++) {
                     if (field[i][j] == minimizer.getNummer() && field[i - 1][j + 1] == minimizer.getNummer() && field[i - 2][j + 2] == 0 && field[i - 3][j + 3] == minimizer.getNummer())
@@ -314,10 +328,24 @@ public class Node {
                 }
             }
 
+            //Diagonale 3er rechts-links
+            for (int i = 3; i < field.length; i++) {
+                for (int j = 3; j < field[0].length; j++) {
+                    if (field[i][j] == maximizer.getNummer() && field[i - 1][j - 1] == maximizer.getNummer() && field[i - 2][j - 2] == 0 && field[i - 3][j - 3] == maximizer.getNummer())
+                        erg -= WEIGHT4;
+                    else if (field[i][j] == maximizer.getNummer() && field[i - 1][j - 1] == maximizer.getNummer() && field[i - 2][j - 2] == maximizer.getNummer() && field[i - 3][j - 3] == 0)
+                        erg -= WEIGHT4;
+                    else if (field[i][j] == maximizer.getNummer() && field[i - 1][j - 1] == 0 && field[i - 2][j - 2] == maximizer.getNummer() && field[i - 3][j - 3] == maximizer.getNummer())
+                        erg -= WEIGHT4;
+                    else if (field[i][j] == 0 && field[i - 1][j - 1] == maximizer.getNummer() && field[i - 2][j - 2] == maximizer.getNummer() && field[i - 3][j - 3] == maximizer.getNummer())
+                        erg -= WEIGHT4;
+                }
+            }
+
             //2er und 3er spalte
             for (int i = 0; i < field[0].length; i++) {
                 count = 0;
-                for (int j = field.length - 1; j >= 2; j--) {
+                for (int j = field.length - 1; j >= 1; j--) {
                     if (field[j][i] == minimizer.getNummer()) {
                         count++;
                         if (count == 2 && field[j - 1][i] == 0)
