@@ -9,10 +9,10 @@ public class Node {
     public int numberCoins;
     public int depth;
     public boolean draw = false;
-    private final int weight1 = 7;
-    private final int weight2 = 2;
-    private final int weight3 = 1;
-    private final int weight4 = 5;
+    private static final int WEIGHT1 = 7;
+    private static final int WEIGHT2 = 2;
+    private static final int WEIGHT3 = 1;
+    private static final int WEIGHT4 = 5;
     public boolean isTerminal()
     {
         boolean won = true;
@@ -124,11 +124,11 @@ public class Node {
                     {
                         if(emptybefore>=1 && count==3)
                         {
-                            erg+=weight1;
+                            erg+= WEIGHT1;
                         }
                         if(count==3 && emptybefore==0)
                         {
-                            erg+=weight2;
+                            erg+= WEIGHT2;
                         }
                         emptybefore=1;
                         count=0;
@@ -139,7 +139,7 @@ public class Node {
                     else if(field[i][j]==minimizer.getNummer())
                     {
                         if(emptybefore>=1 && count==3)
-                            erg+=weight2;
+                            erg+= WEIGHT2;
                         emptybefore=0;
                         count=0;
                     }
@@ -158,7 +158,7 @@ public class Node {
                         else
                             count++;
                         if(count2==2) {
-                            erg += weight4;
+                            erg += WEIGHT4;
                             count=0;
                             count2=0;
                             emptybefore=0;
@@ -188,7 +188,7 @@ public class Node {
                 for(int j = 0; j<field[i].length; j++) {
                     if(field[i][j]==maximizer.getNummer()) {
                         if(emptybefore>=1) {
-                            erg += weight4;
+                            erg += WEIGHT4;
                             count=0;
                             emptybefore=0;
                         }
@@ -218,13 +218,13 @@ public class Node {
                 for(int j = 0; j<field[0].length-3; j++)
                 {
                     if(field[i][j]==maximizer.getNummer() && field[i-1][j+1]==maximizer.getNummer() && field[i-2][j+2]==0 && field[i-3][j+3]==maximizer.getNummer())
-                        erg+=weight4;
+                        erg+= WEIGHT4;
                     else if(field[i][j]==maximizer.getNummer() && field[i-1][j+1]==maximizer.getNummer() && field[i-2][j+2]==maximizer.getNummer() && field[i-3][j+3]==0)
-                        erg+=weight4;
+                        erg+= WEIGHT4;
                     else if(field[i][j]==maximizer.getNummer() && field[i-1][j+1]==0 && field[i-2][j+2]==maximizer.getNummer() && field[i-3][j+3]==maximizer.getNummer())
-                        erg+=weight4;
+                        erg+= WEIGHT4;
                     else if(field[i][j]==0 && field[i-1][j+1]==maximizer.getNummer() && field[i-2][j+2]==maximizer.getNummer() && field[i-3][j+3]==maximizer.getNummer())
-                        erg+=weight4;
+                        erg+= WEIGHT4;
                 }
             }
 
@@ -236,9 +236,9 @@ public class Node {
                     if(field[j][i]==maximizer.getNummer()) {
                         count++;
                         if (count == 2 && field[j-1][i]==0)
-                            erg+=weight3;
+                            erg+= WEIGHT3;
                         else if (count == 3 && field[j-1][i]==0)
-                            erg+=weight2;
+                            erg+= WEIGHT2;
                     }
                     else
                         count=0;
@@ -258,11 +258,11 @@ public class Node {
                     {
                         if(emptybefore>=1 && count==3)
                         {
-                            erg-=weight1;
+                            erg-= WEIGHT1;
                         }
                         if(count==3 && emptybefore==0)
                         {
-                            erg-=weight2;
+                            erg-= WEIGHT2;
                         }
                         emptybefore=1;
                         count=0;
@@ -273,7 +273,7 @@ public class Node {
                     else if(field[i][j]==maximizer.getNummer())
                     {
                         if(emptybefore>=1 && count==3)
-                            erg-=weight2;
+                            erg-= WEIGHT2;
                         emptybefore=0;
                         count=0;
                     }
@@ -292,7 +292,7 @@ public class Node {
                         else
                             count++;
                         if(count2==2) {
-                            erg -= weight4;
+                            erg -= WEIGHT4;
                             count=0;
                             count2=0;
                             emptybefore=0;
@@ -322,7 +322,7 @@ public class Node {
                 for(int j = 0; j<field[i].length; j++) {
                     if(field[i][j]==minimizer.getNummer()) {
                         if(emptybefore>=1) {
-                            erg -= weight4;
+                            erg -= WEIGHT4;
                             count=0;
                             emptybefore=0;
                         }
@@ -352,13 +352,13 @@ public class Node {
                 for(int j = 0; j<field[0].length-3; j++)
                 {
                     if(field[i][j]== minimizer.getNummer() && field[i-1][j+1]==minimizer.getNummer() && field[i-2][j+2]==0 && field[i-3][j+3]==minimizer.getNummer())
-                        erg-=weight4;
+                        erg-= WEIGHT4;
                     else if(field[i][j]==minimizer.getNummer() && field[i-1][j+1]==minimizer.getNummer() && field[i-2][j+2]==minimizer.getNummer() && field[i-3][j+3]==0)
-                        erg-=weight4;
+                        erg-= WEIGHT4;
                     else if(field[i][j]==minimizer.getNummer() && field[i-1][j+1]==0 && field[i-2][j+2]==minimizer.getNummer() && field[i-3][j+3]==minimizer.getNummer())
-                        erg-=weight4;
+                        erg-= WEIGHT4;
                     else if(field[i][j]==0 && field[i-1][j+1]==minimizer.getNummer() && field[i-2][j+2]==minimizer.getNummer() && field[i-3][j+3]==minimizer.getNummer())
-                        erg-=weight4;
+                        erg-= WEIGHT4;
                 }
             }
 
@@ -370,9 +370,9 @@ public class Node {
                     if(field[j][i]==minimizer.getNummer()) {
                         count++;
                         if (count == 2 && field[j-1][i]==0)
-                            erg-=weight3;
+                            erg-= WEIGHT3;
                         else if (count == 3 && field[j-1][i]==0)
-                            erg-=weight2;
+                            erg-= WEIGHT2;
                     }
                     else
                         count=0;
