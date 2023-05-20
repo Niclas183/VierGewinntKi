@@ -73,7 +73,6 @@ public class KI extends Spieler{
         else {
             action = AlphaBetaPruningMin(start, Integer.MIN_VALUE, Integer.MAX_VALUE);
         }
-        System.out.println(action.x);
         return action.y;
     }
 

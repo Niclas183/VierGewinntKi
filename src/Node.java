@@ -12,7 +12,7 @@ public class Node {
     private final int weight1 = 7;
     private final int weight2 = 2;
     private final int weight3 = 1;
-
+    private final int weight4 = 5;
     public boolean isTerminal()
     {
         boolean won = true;
@@ -109,6 +109,7 @@ public class Node {
             }
             int erg = 0;
             //Bewertung für Maximizer
+            //3er Reihe mit Links und Rechts frei und 3er mit links oder rechts frei
             int emptybefore;
             int count;
             int emptyafter;
@@ -116,50 +117,268 @@ public class Node {
             {
                 emptybefore = 0;
                 count = 0;
-                emptyafter = 0;
                 for(int j = 0; j<field[i].length; j++) {
                     if(field[i][j]==0 && count==0)
                         emptybefore++;
-                    if(field[i][j]==0 && count!=0)
+                    else if(field[i][j]==0 && count!=0)
                     {
                         if(emptybefore>=1 && count==3)
                         {
                             erg+=weight1;
-                            count=0;
-                            emptybefore=1;
                         }
+                        if(count==3 && emptybefore==0)
+                        {
+                            erg+=weight2;
+                        }
+                        emptybefore=1;
+                        count=0;
                     }
-                    if(field[i][j]==maximizer.getNummer()) {
+                    else if(field[i][j]==maximizer.getNummer()) {
                         count++;
+                    }
+                    else if(field[i][j]==minimizer.getNummer())
+                    {
+                        if(emptybefore>=1 && count==3)
+                            erg+=weight2;
+                        emptybefore=0;
+                        count=0;
                     }
                 }
             }
-
-            //Bewertung für Minimizer
+            //3er mit X_XX
             for(int i = 0; i<field.length; i++)
             {
                 emptybefore = 0;
                 count = 0;
-                emptyafter = 0;
+                int count2 = 0;
+                for(int j = 0; j<field[i].length; j++) {
+                    if(field[i][j]==maximizer.getNummer()) {
+                        if(count==1 && emptybefore>=1)
+                            count2++;
+                        else
+                            count++;
+                        if(count2==2) {
+                            erg += weight4;
+                            count=0;
+                            count2=0;
+                            emptybefore=0;
+                        }
+                    }
+                    else if(field[i][j]==0) {
+                        if (count > 0 && count2==0)
+                            emptybefore++;
+                        else {
+                            count = 0;
+                            emptybefore = 0;
+                        }
+                    }
+                    else if(field[i][j]==minimizer.getNummer())
+                    {
+                        count=0;
+                        count2=0;
+                        emptybefore=0;
+                    }
+                }
+            }
+            //3er mit XX_X
+            for(int i = 0; i<field.length; i++)
+            {
+                emptybefore = 0;
+                count = 0;
+                for(int j = 0; j<field[i].length; j++) {
+                    if(field[i][j]==maximizer.getNummer()) {
+                        if(emptybefore>=1) {
+                            erg += weight4;
+                            count=0;
+                            emptybefore=0;
+                        }
+                        else
+                            count++;
+                    }
+                    else if(field[i][j]==0)
+                    {
+                        if(count>1)
+                            emptybefore++;
+                        else{
+                            count=0;
+                            emptybefore=0;
+                        }
+                    }
+                    else if(field[i][j]==minimizer.getNummer())
+                    {
+                        count=0;
+                        emptybefore=0;
+                    }
+                }
+            }
+
+            //Diagonale 3er
+            for(int i = 3; i<field.length; i++)
+            {
+                for(int j = 0; j<field[0].length-3; j++)
+                {
+                    if(field[i][j]==maximizer.getNummer() && field[i-1][j+1]==maximizer.getNummer() && field[i-2][j+2]==0 && field[i-3][j+3]==maximizer.getNummer())
+                        erg+=weight4;
+                    else if(field[i][j]==maximizer.getNummer() && field[i-1][j+1]==maximizer.getNummer() && field[i-2][j+2]==maximizer.getNummer() && field[i-3][j+3]==0)
+                        erg+=weight4;
+                    else if(field[i][j]==maximizer.getNummer() && field[i-1][j+1]==0 && field[i-2][j+2]==maximizer.getNummer() && field[i-3][j+3]==maximizer.getNummer())
+                        erg+=weight4;
+                    else if(field[i][j]==0 && field[i-1][j+1]==maximizer.getNummer() && field[i-2][j+2]==maximizer.getNummer() && field[i-3][j+3]==maximizer.getNummer())
+                        erg+=weight4;
+                }
+            }
+
+            //2er und 3er spalte
+            for(int i = 0; i<field[0].length; i++)
+            {
+                count = 0;
+                for(int j = field.length-1; j>=2; j--) {
+                    if(field[j][i]==maximizer.getNummer()) {
+                        count++;
+                        if (count == 2 && field[j-1][i]==0)
+                            erg+=weight3;
+                        else if (count == 3 && field[j-1][i]==0)
+                            erg+=weight2;
+                    }
+                    else
+                        count=0;
+                }
+            }
+
+            //Bewertung für Minimizer
+            //3er Reihe mit Links und Rechts frei und 3er mit links oder rechts frei
+            for(int i = 0; i<field.length; i++)
+            {
+                emptybefore = 0;
+                count = 0;
                 for(int j = 0; j<field[i].length; j++) {
                     if(field[i][j]==0 && count==0)
                         emptybefore++;
-                    if(field[i][j]==0 && count!=0)
+                    else if(field[i][j]==0 && count!=0)
                     {
                         if(emptybefore>=1 && count==3)
                         {
                             erg-=weight1;
-                            count=0;
-                            emptybefore=1;
                         }
+                        if(count==3 && emptybefore==0)
+                        {
+                            erg-=weight2;
+                        }
+                        emptybefore=1;
+                        count=0;
                     }
-                    if(field[i][j]==minimizer.getNummer()) {
+                    else if(field[i][j]==minimizer.getNummer()) {
                         count++;
+                    }
+                    else if(field[i][j]==maximizer.getNummer())
+                    {
+                        if(emptybefore>=1 && count==3)
+                            erg-=weight2;
+                        emptybefore=0;
+                        count=0;
                     }
                 }
             }
-            if(Math.abs(erg)>0)
-                System.out.println(erg);
+            //3er mit X_XX
+            for(int i = 0; i<field.length; i++)
+            {
+                emptybefore = 0;
+                count = 0;
+                int count2 = 0;
+                for(int j = 0; j<field[i].length; j++) {
+                    if(field[i][j]==minimizer.getNummer()) {
+                        if(count==1 && emptybefore>=1)
+                            count2++;
+                        else
+                            count++;
+                        if(count2==2) {
+                            erg -= weight4;
+                            count=0;
+                            count2=0;
+                            emptybefore=0;
+                        }
+                    }
+                    else if(field[i][j]==0) {
+                        if (count > 0 && count2==0)
+                            emptybefore++;
+                        else {
+                            count = 0;
+                            emptybefore = 0;
+                        }
+                    }
+                    else if(field[i][j]==maximizer.getNummer())
+                    {
+                        count=0;
+                        count2=0;
+                        emptybefore=0;
+                    }
+                }
+            }
+            //3er mit XX_X
+            for(int i = 0; i<field.length; i++)
+            {
+                emptybefore = 0;
+                count = 0;
+                for(int j = 0; j<field[i].length; j++) {
+                    if(field[i][j]==minimizer.getNummer()) {
+                        if(emptybefore>=1) {
+                            erg -= weight4;
+                            count=0;
+                            emptybefore=0;
+                        }
+                        else
+                            count++;
+                    }
+                    else if(field[i][j]==0)
+                    {
+                        if(count>1)
+                            emptybefore++;
+                        else{
+                            count=0;
+                            emptybefore=0;
+                        }
+                    }
+                    else if(field[i][j]==maximizer.getNummer())
+                    {
+                        count=0;
+                        emptybefore=0;
+                    }
+                }
+            }
+
+            //Diagonale 3er
+            for(int i = 3; i<field.length; i++)
+            {
+                for(int j = 0; j<field[0].length-3; j++)
+                {
+                    if(field[i][j]== minimizer.getNummer() && field[i-1][j+1]==minimizer.getNummer() && field[i-2][j+2]==0 && field[i-3][j+3]==minimizer.getNummer())
+                        erg-=weight4;
+                    else if(field[i][j]==minimizer.getNummer() && field[i-1][j+1]==minimizer.getNummer() && field[i-2][j+2]==minimizer.getNummer() && field[i-3][j+3]==0)
+                        erg-=weight4;
+                    else if(field[i][j]==minimizer.getNummer() && field[i-1][j+1]==0 && field[i-2][j+2]==minimizer.getNummer() && field[i-3][j+3]==minimizer.getNummer())
+                        erg-=weight4;
+                    else if(field[i][j]==0 && field[i-1][j+1]==minimizer.getNummer() && field[i-2][j+2]==minimizer.getNummer() && field[i-3][j+3]==minimizer.getNummer())
+                        erg-=weight4;
+                }
+            }
+
+            //2er und 3er spalte
+            for(int i = 0; i<field[0].length; i++)
+            {
+                count = 0;
+                for(int j = field.length-1; j>=2; j--) {
+                    if(field[j][i]==minimizer.getNummer()) {
+                        count++;
+                        if (count == 2 && field[j-1][i]==0)
+                            erg-=weight3;
+                        else if (count == 3 && field[j-1][i]==0)
+                            erg-=weight2;
+                    }
+                    else
+                        count=0;
+                }
+            }
+
             return erg;
         }
         if(other.maximizer)
@@ -167,19 +386,6 @@ public class Node {
         else
             return -100;
 
-        /*
-        +
-        Maximierer
-        3er mit zwei freien feldern (links und rechts und nur bei horizontal) * 70%
-        3er mit einem freien feld(links oder rechts oder in der mitte bei horizontal, mind ein freies feld oberhalb bei vertikal, mind. ein freies feld für diagoale in beide richtungen) * 20%
-        2er mit zwei freien feldern(2*links oder links+rechts oder 2*rechts bei horizontal, mind. zwei freie felder oberhalb bei vertikal, mind. zwei freie feld für diagoale in beide richtungen) * 10%
-
-        -
-        Minimierer
-        3er mit zwei freien feldern (links und rechts und nur bei horizontal) * 70%
-        3er mit einem freien feld(links oder rechts bei horizontal, mind ein freies feld oberhalb bei vertikal, mind. ein freies feld für diagoale in beide richtungen) * 20%
-        2er mit zwei freien feldern(2*links oder links+rechts oder 2*rechts bei horizontal, mind. zwei freie felder oberhalb bei vertikal, mind. zwei freie feld für diagoale in beide richtungen) * 10%
-        */
     }
     public Node(int[][] field, Spieler s, Spieler other, int depth)
     {
