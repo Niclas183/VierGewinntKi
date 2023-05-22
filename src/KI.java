@@ -40,7 +40,7 @@ public class KI extends Spieler {
     }
 
     public Pair<Integer, Integer> AlphaBetaPruningMin(Node node, int alpha, int beta) {
-        if (node.isTerminal()) {
+        if (node.isTerminal() || node.depth >= MAXDEPTH) {
             return new Pair<>(node.utility(), -1);
         }
         Pair<Integer, Integer> erg = new Pair<>(Integer.MAX_VALUE, -1);
@@ -68,6 +68,43 @@ public class KI extends Spieler {
         }
         return action.y;
     }
+
+    public int Expectimax(Spielfeld sp) {
+        // Expectimax User is always the maximizer. The other Players nodes use the expected value (with equal distribution)
+        Node start = new Node(sp.field, this, other, 0);
+        Pair<Integer, Integer> action = ExpectimaxMax(start);
+        return action.y;
+    }
+
+    public Pair<Integer, Integer> ExpectimaxMax(Node node) {
+        if (node.isTerminal() || node.depth >= MAXDEPTH-2) {
+            return new Pair<>(node.utility(), -1);
+        }
+        Pair<Integer, Integer> erg = new Pair<>(Integer.MIN_VALUE, -1);
+        List<Node> children = node.expand();
+        for (Node child : children) {
+            int temp = ExpectimaxExpected(child);
+            if (temp > erg.x) {
+                erg.x = temp;
+                erg.y = child.action;
+            }
+        }
+        return erg;
+    }
+
+    public int ExpectimaxExpected(Node node) {
+        if (node.isTerminal() || node.depth >= MAXDEPTH-2) {
+            return node.utility();
+        }
+        int erg = 0;
+        List<Node> children = node.expand();
+        for (Node child : children) {
+            Pair<Integer, Integer> temp = ExpectimaxMax(child);
+            erg += temp.x;
+        }
+        return erg / children.size();
+    }
+
 
     @Override
     public void setzteSpielstein(Spielfeld sp) {
